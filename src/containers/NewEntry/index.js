@@ -6,12 +6,12 @@ import { createEntry }                                      from '../../reducers
 
 
 const mapStateToProps = (state, ownProps) => {
-  const { isLoading } = state.entry
-  const content                = _.get(state, 'form.NewEntryForm.values.content', '')
+  // const { isLoading } = state.entry
+  // const content                = _.get(state, 'form.NewEntryForm.values.content', '')
   
   return {
-    content,
-    isLoading
+    // content,
+    // isLoading
 
   }
 }

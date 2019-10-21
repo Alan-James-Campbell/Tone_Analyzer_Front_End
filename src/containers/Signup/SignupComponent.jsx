@@ -2,8 +2,7 @@ import React, { Component }                                 from 'react'
 import { withRouter }                                       from 'react-router'
 import { Button }                                           from 'react-bootstrap'
 import { Field }                                            from 'redux-form'
-import { passwordValidation, emailValidation }              from './validations'
-
+import { passwordValidation, emailValidation }              from '../../validations'
 import './Signup.css'
 
 class Signup extends Component {
@@ -21,7 +20,7 @@ class Signup extends Component {
   renderConfirmationForm() {
     const { confirmCode, history, newUserSignedUp, handleConfirmationSubmit, signupErrorMessage, updateSignupErrors, isLoading } = this.props
     return (
-      <div className="Login">
+      <div className="Signup">
         <h2>Confirmation</h2><br/><br/>
         <form onSubmit={e => handleConfirmationSubmit(e, newUserSignedUp, confirmCode, history)}>
             <label>Confirmation Code</label>
@@ -64,7 +63,7 @@ class Signup extends Component {
     const { handleSignupSubmit, email, password, history, signupErrorMessage, updateSignupErrors, isLoading, valid } = this.props
 
     return (
-      <div className="Login">
+      <div className="Signup">
         <h2>Signup</h2><br/><br/>
 
         <form onSubmit={e => handleSignupSubmit(e, email, password, history)}>
