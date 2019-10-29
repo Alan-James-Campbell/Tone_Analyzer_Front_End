@@ -1,6 +1,10 @@
 import App 								                           from './AppComponent'
 import { connect }  					                       from 'react-redux'
-import { logout, isUserAuthenticated, newUserAdded, updateLoginErrors, updateSignupErrors } from '../reducers/auth'
+import { logout, 
+         checkUserAuthentication, 
+         newUserAdded, 
+         updateLoginErrors, 
+         updateSignupErrors }                        from '../../reducers/auth'
 
 const mapStateToProps = (state, ownProps) => {
   const { sessionInfo } = state.auth || {}
@@ -15,8 +19,8 @@ const mapDispatchToProps = dispatch => ({
   logout(routerHistory){
   	return dispatch(logout(routerHistory))
   },
-  isUserAuthenticated(){
-  	return dispatch(isUserAuthenticated())
+  checkUserAuthentication(){
+  	return dispatch(checkUserAuthentication())
   },
   newUserAdded(str){
     return dispatch(newUserAdded(str))
