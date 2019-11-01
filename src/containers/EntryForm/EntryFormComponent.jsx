@@ -1,43 +1,51 @@
-import React, { Component }                                 from 'react'
+import React                                                from 'react'
 import { Button }                                           from 'react-bootstrap'
 import { Field }                                            from 'redux-form'
-// import './EntryForm.css'
+import                                                      './EntryForm.css'
 
-export default class EntryForm extends Component {
+const EntryForm = ({ formType, analyzeEntry, currentFormContent }) => {
 
-  render() {
-    const {  } = this.props
+  return (
+    <div className='EntryForm'>
+    <h2>{formType} Entry </h2><br/><br/>
+      <form onSubmit={e => analyzeEntry(e, currentFormContent)}>
+          
+        <label>Title</label>
+        <Field 
+          name='title' 
+          label='title'
+          type='input'
+          component={renderField}
+        />            
 
-    return (
-      <div className="">
-      <h2>New/Edit Entry (fix this based on conditional route)</h2><br/><br/>
-        <form onSubmit={e => alert('do something here')}>
-            <label>Title</label>
-            <Field 
-              name="title" 
-              label='title'
-              component={renderField}
-            />
-            
-     
-
-          <Button
-            block
-            disabled=''
-            type="submit"
-            className=""
-          >
-
-          </Button>
-        </form>
-      </div>
-    );
-  }
+        <label>Content</label>
+        <Field
+          name='content'
+          label='content'
+          type='textarea'
+          component={renderField}
+        />
+          
+        <Button
+          block
+          disabled=''
+          type='submit'
+        >
+          Analyze
+        </Button>
+      </form>
+    </div>
+  )
+ 
 }
 
 const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div >
-    <input className='form-control'{...input} placeholder={label} type={type}/>  
+    {type === 'input'&& <input className='form-control'{...input} type={type}/>} 
+    {type === 'textarea'&&<textarea className='form-control' id='entryTextArea' {...input} type={type}/>} 
     {touched && (error && <small style={{'color':'red'}}>{error}</small>)}
   </div>
 )
+
+export default EntryForm
+

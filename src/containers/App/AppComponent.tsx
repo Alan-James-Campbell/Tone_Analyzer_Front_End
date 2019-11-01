@@ -14,7 +14,7 @@ type AppProps  = {
   logout: Function;
 };
 
-export const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSignupErrors, updateLoginErrors, logout }: AppProps) => {
+const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSignupErrors, updateLoginErrors, logout }: AppProps) => {
 
   useEffect(() => {checkUserAuthentication()}, [checkUserAuthentication])
 

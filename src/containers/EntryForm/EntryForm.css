@@ -1,0 +1,10 @@
+.EntryForm {
+  padding: 60px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#entryTextArea {
+  height: 300px;
+  margin-bottom: 20px;
+}

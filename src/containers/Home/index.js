@@ -1,5 +1,6 @@
 import Home 								                         from './HomeComponent'
 import { connect }  					                             from 'react-redux'
+import { getAllEntries }											 from '../../reducers/entry'
 
 const mapStateToProps = (state, ownProps) => {
   const { sessionInfo } = state.auth || {}
@@ -10,8 +11,12 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-
-})
+const mapDispatchToProps = dispatch => (
+  {
+    getAllEntries(){
+  	  return dispatch(getAllEntries())
+    }
+  }
+)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

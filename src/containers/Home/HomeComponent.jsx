@@ -4,8 +4,13 @@ import './Home.css'
 
 export default class Home extends Component {
 
+  componentDidMount() {
+    const { getAllEntries } = this.props
+    getAllEntries()
+  }
+
   render() {
-    const { isAuthenticated, history } = this.props;
+    const { isAuthenticated, history } = this.props
 
     return (
       <div>

@@ -1,4 +1,5 @@
 import { API, Storage } from 'aws-amplify'
+import axios            from 'axios'
 
 //INITIAL STATE//
 
@@ -48,7 +49,7 @@ const postEntry = entry => dispatch =>
     entry
   })
 
-const listAllNotes = entries => dispatch => 
+const listAllEntries = entries => dispatch => 
   dispatch({
     type: LIST_ALL_ENTRIES,
     entries
@@ -58,6 +59,18 @@ const listAllNotes = entries => dispatch =>
 /////////////////////
 
 //THUNKS//
+
+
+export const analyzeEntry = (content) => dispatch => {
+  console.log('content', content)
+   axios.get(`/api/analyzeEntry/:${content}`)
+   .then(response => {
+     console.log('responseData', response.data)
+   })
+   .catch(err => console.log(err))
+}
+
+
 
 export const createEntry = (e, content, file, history) => dispatch => {
     alert(e, content, file, history)
@@ -77,12 +90,10 @@ export const createEntry = (e, content, file, history) => dispatch => {
     // .catch(err => console.log('err: ' + err))
 }
 
-export const getAllNotes = () => dispatch => {
-  alert('getting all notes')
-  // return API.get("notes", "/notes")
-  // .then(allNotes => dispatch(listAllNotes(allNotes)))
-  // .catch(err => console.log(err))
-}
+export const getAllEntries = () => dispatch =>
+  API.get("entries", "/entries")
+  .then(allEntries => dispatch(listAllEntries(allEntries)))
+  .catch(err => console.log(err))
 
 
 /////////////////////////////
