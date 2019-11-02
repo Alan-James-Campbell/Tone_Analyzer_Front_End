@@ -12,7 +12,7 @@ type AppProps  = {
   updateSignupErrors: Function;
   updateLoginErrors: Function;
   logout: Function;
-};
+}
 
 const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSignupErrors, updateLoginErrors, logout }: AppProps) => {
 

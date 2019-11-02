@@ -10,8 +10,6 @@ import { logout,
 
 const mapStateToProps = (state: AppState) => {
   const sessionInfo  = state.auth.sessionInfo || {}
-  console.log('state', state)
-  console.log('ses', sessionInfo)
   const isAuthenticated = Object.keys(sessionInfo).length > 0
   
   return {

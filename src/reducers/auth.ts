@@ -1,7 +1,6 @@
 import { Auth }                           from 'aws-amplify'
 
 //INITIAL STATE//
-
 export interface AuthState {
   sessionInfo:        object,
   newUserSignedUp:    string,
@@ -16,16 +15,16 @@ const initialState: AuthState = {
   isLoading:          false,
   errorMessage:       '',
   signupErrorMessage: ''
-};
+}
 
 //CONSTANTS//
-
 const UPDATE_SESSION_INFO  = 'UPDATE_SESSION_INFO'
 const NEW_USER_SIGNED_UP   = 'NEW_USER_SIGNED_UP'
 const UPDATE_IS_LOADING    = 'UPDATE_IS_LOADING'
 const UPDATE_LOGIN_ERRORS  = 'UPDATE_LOGIN_ERRORS'
 const UPDATE_SIGNUP_ERRORS = 'UPDATE_SIGNUP_ERRORS'
 
+//ACTION CREATOR TYPES//
 interface UpdateSessionInfoAction {
   type: typeof UPDATE_SESSION_INFO
   payload: AuthState["sessionInfo"]
@@ -55,7 +54,6 @@ type AuthenticationTypes = UpdateSessionInfoAction | NewUserSignedUpAction | Upd
 
 
 //ACTION CREATORS//
-
 export const updateSessionInfo = (sessionInfo: AuthState["sessionInfo"]): UpdateSessionInfoAction => 
   ({
     type: UPDATE_SESSION_INFO,
@@ -89,7 +87,6 @@ export const updateSignupErrors = (errorMessage: AuthState["signupErrorMessage"]
 
 
 //THUNKS//
-
 export const checkUserAuthentication = () => (dispatch:any) => 
   Auth.currentSession()
   .then(sessionInfo => dispatch(updateSessionInfo(sessionInfo)))
@@ -159,7 +156,6 @@ export const logout = (routerHistory:any) => (dispatch:any) =>
 
 
 //REDUCER//
-
 const reducer = (state = initialState, action: AuthenticationTypes ): AuthState => {
   
   switch (action.type) {

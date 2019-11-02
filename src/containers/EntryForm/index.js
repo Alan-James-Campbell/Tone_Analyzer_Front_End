@@ -27,3 +27,4 @@ const EntryForm = reduxForm({
 })(EntryFormComponent)
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntryForm)
+
