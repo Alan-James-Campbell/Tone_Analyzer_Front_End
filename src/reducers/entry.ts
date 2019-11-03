@@ -7,28 +7,36 @@ import axios               from 'axios'
 
 export interface EntryState {
   allEntries: ReadonlyArray<{ analysis: object, content: string, createdAt: number, entryId: string, title: string, userId: string }>,
-  lastAnalyzedEntry:  object,
-  isLoading:          boolean,
-  errorMessage:       string,
+  lastAnalyzedEntryResults:    object,
+  lastAnalyzedTextSubmission:  string,
+  isLoading:                   boolean,
+  errorMessage:                string,
 }
 
 const initialState: EntryState = {
-  allEntries:         [],
-  lastAnalyzedEntry:  {},
-  isLoading:          false,
-  errorMessage:       ''
+  allEntries:                     [],
+  lastAnalyzedEntryResults:       {},
+  lastAnalyzedTextSubmission:     '',
+  isLoading:                      false,
+  errorMessage:                   ''
 }
 
 //CONSTANTS//
-const UPDATE_LAST_ANALYZED_ENTRY     = 'UPDATE_LAST_ANALYZED_ENTRY'
-const LIST_ALL_ENTRIES               = 'LIST_ALL_ENTRIES'
-// const CREATE_ENTRY                   = 'CREATE_ENTRY'
+const UPDATE_LAST_ANALYZED_ENTRY               = 'UPDATE_LAST_ANALYZED_ENTRY'
+const UPDATE_LAST_ANALYZED_TEXT_SUBMISSION     = 'UPDATE_LAST_ANALYZED_TEXT_SUBMISSION'
+const LIST_ALL_ENTRIES                         = 'LIST_ALL_ENTRIES'
+// const CREATE_ENTRY                          = 'CREATE_ENTRY'
 
 
 //ACTION CREATOR TYPES//
 interface Update_Last_Analyzed_Entry_Action {
   type: typeof UPDATE_LAST_ANALYZED_ENTRY
-  payload: EntryState["lastAnalyzedEntry"]
+  payload: EntryState["lastAnalyzedEntryResults"]
+}
+
+interface Update_Last_Analyzed_Text_Submission_Action {
+  type: typeof UPDATE_LAST_ANALYZED_TEXT_SUBMISSION
+  payload: EntryState["lastAnalyzedTextSubmission"]
 }
 
 interface ListAllEntriesAction {
@@ -36,13 +44,19 @@ interface ListAllEntriesAction {
   payload: EntryState["allEntries"]
 }
 
-type EntryTypes = Update_Last_Analyzed_Entry_Action | ListAllEntriesAction
+type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction
 
 //ACTION CREATORS//
-export const update_Last_Analyzed_Entry = (lastAnalyzedEntry:EntryState["lastAnalyzedEntry"]): EntryTypes => 
+export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["lastAnalyzedEntryResults"]): EntryTypes => 
   ({
     type: UPDATE_LAST_ANALYZED_ENTRY, 
-    payload: lastAnalyzedEntry 
+    payload: lastAnalyzedEntryResults
+  })
+
+  export const update_Last_Analyzed_Text_Submission = (lastAnalyzedTextSubmission:EntryState["lastAnalyzedTextSubmission"]): EntryTypes => 
+  ({
+    type: UPDATE_LAST_ANALYZED_TEXT_SUBMISSION, 
+    payload: lastAnalyzedTextSubmission 
   })
 
   export const listAllEntries = (allEntries:EntryState["allEntries"]): EntryTypes => 
@@ -57,7 +71,10 @@ export const update_Last_Analyzed_Entry = (lastAnalyzedEntry:EntryState["lastAna
 //THUNKS//
 export const analyzeEntry = (text:string) => (dispatch:any) => 
   axios.post(`/api/entries/analyzeEntry`, {text})
-    .then(response => dispatch(update_Last_Analyzed_Entry(response.data))) 
+    .then(response => {
+      dispatch(update_Last_Analyzed_Text_Submission(text))
+      dispatch(update_Last_Analyzed_Entry(response.data))
+     })
     .catch(err => console.log(err))
 
 export const getAllEntries = () => (dispatch:any) =>
@@ -90,7 +107,13 @@ const reducer = (state = initialState, action: EntryTypes ): EntryState => {
     case UPDATE_LAST_ANALYZED_ENTRY:
       return {
        ...state,
-       lastAnalyzedEntry: action.payload
+       lastAnalyzedEntryResults: action.payload
+      }    
+
+      case UPDATE_LAST_ANALYZED_TEXT_SUBMISSION:
+      return {
+       ...state,
+       lastAnalyzedTextSubmission: action.payload
       }
 
     case LIST_ALL_ENTRIES:

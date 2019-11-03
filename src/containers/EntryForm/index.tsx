@@ -5,20 +5,25 @@ import { AppState }                               from '../../reducers'
 import { analyzeEntry }                           from '../../reducers/entry'
 import _                                          from 'lodash'
 
-export interface EntryFormProps {
+export interface EntryFormProps { 
   analyzeEntry: Function;
   currentFormContent: String;
   currentTitle: String;
   formType: String;
+  lastAnalyzedEntryResults: Object;
+  lastAnalyzedTextSubmission: String;
   valid: Boolean
 }
 
 const mapStateToProps = (state: AppState) => {
   const currentFormContent = _.get(state, 'form.EntryForm.values.content', '')
   const currentTitle = _.get(state, 'form.EntryForm.values.title', '')
+  const { lastAnalyzedEntryResults, lastAnalyzedTextSubmission } = state.entry
   return {
     currentFormContent,
-    currentTitle
+    currentTitle,
+    lastAnalyzedEntryResults,
+    lastAnalyzedTextSubmission
   }
 }
 
