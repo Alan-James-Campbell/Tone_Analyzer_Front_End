@@ -2,8 +2,7 @@ import React, { useEffect }             from 'react'
 import { Link, useHistory }             from 'react-router-dom'
 import { LinkContainer }                from 'react-router-bootstrap'
 import { Navbar, Nav }                  from 'react-bootstrap'
-
-import './App.css'
+import                                   './App.css'
 
 type AppProps  = {
   newUserAdded: Function;

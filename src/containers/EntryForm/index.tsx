@@ -1,30 +1,36 @@
 import EntryFormComponent 								        from './EntryFormComponent'
 import { connect }  					                    from 'react-redux'
 import { reduxForm }                              from 'redux-form'
+import { AppState }                               from '../../reducers'
 import { analyzeEntry }                           from '../../reducers/entry'
 import _                                          from 'lodash'
 
-// 
-const mapStateToProps = (state, ownProps) => {
-  // const {  } = state.entry
+export interface EntryFormProps {
+  analyzeEntry: Function;
+  currentFormContent: String;
+  currentTitle: String;
+  formType: String;
+  valid: Boolean
+}
+
+const mapStateToProps = (state: AppState) => {
   const currentFormContent = _.get(state, 'form.EntryForm.values.content', '')
-  // const password = _.get(state, 'form.LoginForm.values.password', '')
+  const currentTitle = _.get(state, 'form.EntryForm.values.title', '')
   return {
-    currentFormContent
+    currentFormContent,
+    currentTitle
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  analyzeEntry(e, content) {
+const mapDispatchToProps = (dispatch:any) => ({
+  analyzeEntry(e:any, content:string) {
      e.preventDefault()
      dispatch(analyzeEntry(content))
   }
 })
 
-
-const EntryForm = reduxForm({
+const EntryForm = reduxForm<{}, EntryFormProps>({
   form: 'EntryForm',
 })(EntryFormComponent)
 
 export default connect(mapStateToProps, mapDispatchToProps)(EntryForm)
-

@@ -1,21 +1,23 @@
 import React                                                from 'react'
 import { Button }                                           from 'react-bootstrap'
+import { FormGroup, Input }                                 from 'reactstrap'
 import { Field }                                            from 'redux-form'
+import { EntryFormProps }                                   from './index'
 import                                                      './EntryForm.css'
 
-const EntryForm = ({ formType, analyzeEntry, currentFormContent }) => {
+const EntryForm = ({ formType, analyzeEntry, currentFormContent, valid }: EntryFormProps) => {                                                      
 
   return (
     <div className='EntryForm'>
     <h2>{formType} Entry </h2><br/><br/>
-      <form onSubmit={e => analyzeEntry(e, currentFormContent)}>
+      <form onSubmit={(e:any) => analyzeEntry(e, currentFormContent)}>
           
         <label>Title</label>
         <Field 
           name='title' 
           label='title'
           type='input'
-          component={renderField}
+          component={ReduxFormInput}
         />            
 
         <label>Content</label>
@@ -23,12 +25,12 @@ const EntryForm = ({ formType, analyzeEntry, currentFormContent }) => {
           name='content'
           label='content'
           type='textarea'
-          component={renderField}
+          component={ReduxFormInput}
         />
           
         <Button
           block
-          disabled=''
+          disabled={!valid}
           type='submit'
         >
           Analyze
@@ -39,13 +41,18 @@ const EntryForm = ({ formType, analyzeEntry, currentFormContent }) => {
  
 }
 
-const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
-  <div >
-    {type === 'input'&& <input className='form-control'{...input} type={type}/>} 
-    {type === 'textarea'&&<textarea className='form-control' id='entryTextArea' {...input} type={type}/>} 
-    {touched && (error && <small style={{'color':'red'}}>{error}</small>)}
-  </div>
+const ReduxFormInput: React.FC = (field: any) => (
+  <FormGroup row={true}>
+    <Input
+      {...field.input}
+      type={field.type}
+      placeholder={field.label}
+      disabled={field.disabled}
+    />
+    {field.meta.touched && <p className='text-danger'>{field.meta.error}</p>}
+  </FormGroup>
 )
+
 
 export default EntryForm
 
