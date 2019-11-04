@@ -4,52 +4,35 @@ import { FormGroup, Input }                                 from 'reactstrap'
 import { Field }                                            from 'redux-form'
 import { EntryFormProps }                                   from './index'
 import { minLength5, minLength20 }                          from '../../validations'
+import EntryAnalysisResult                                  from '../EntryAnalysisResult'
 import                                                      './EntryForm.css'
 
-const EntryForm = ({ analyzeEntry, currentFormContent, formType, lastAnalyzedEntryResults, lastAnalyzedTextSubmission, valid }: EntryFormProps) => {                                                      
-  console.log('lastAnalyzedTextSubmission', lastAnalyzedTextSubmission)
+const EntryForm = ({ analysisResultsModalIsShowing, analyzeEntry, currentFormContent, currentTitle, documentTones, formType, lastAnalyzedEntryResults, lastAnalyzedTextSubmission, sentencesToneObjectArray, showAnalysisResultsModal, valid }: EntryFormProps) => {                                                      
   return (
-    <div className='EntryForm'>
-    <h2>{formType} Entry </h2><br/><br/>
-      <form onSubmit={(e:any) => analyzeEntry(e, currentFormContent)}>
-          
-        <label>Title</label>
-        <Field 
-          name='title' 
-          label='title'
-          type='input'
-          component={ReduxFormInput}
-          validate={ [minLength5] }
-        />            
+    <div>
+      {analysisResultsModalIsShowing&&(
+        <EntryAnalysisResult currentFormContent={currentFormContent} currentTitle={currentTitle} documentTones={documentTones} sentencesToneObjectArray={sentencesToneObjectArray} /> 
+      )}
+      
+      {!analysisResultsModalIsShowing&&(
+        <div className='EntryForm'>
+          <h2>{formType} Entry </h2><br/><br/>
+          <form>
+            
+            <label>Title</label>
+            <Field name='title'label='title' type='input'component={ReduxFormInput} validate={ [minLength5] } />
+            
+             <label>Content</label>
+             <Field name='content'label='content 'type='textarea'component={ReduxFormInput} validate={ [minLength20] } />
+            
+            <Button block disabled={!valid} onClick={(e:any) => currentFormContent === lastAnalyzedTextSubmission ? showAnalysisResultsModal(true) : analyzeEntry(e, currentFormContent)} > Show Analysis </Button>
 
-        <label>Content</label>
-        <Field
-          name='content'
-          label='content'
-          type='textarea'
-          component={ReduxFormInput}
-          validate={ [minLength20] }
+          </form>
+        </div>
+      )}
 
-        />
-          
-        <Button
-          block
-          disabled={!valid||(currentFormContent===lastAnalyzedTextSubmission)}
-          type='submit'
-        >
-          Analyze
-        </Button>        
-
-        <Button
-          block
-          disabled={true}
-        >
-          Save Entry
-        </Button>
-      </form>
     </div>
   )
- 
 }
 
 const ReduxFormInput: React.FC = (field: any) => (
@@ -63,7 +46,6 @@ const ReduxFormInput: React.FC = (field: any) => (
     {field.meta.touched && <p className='text-danger'>{field.meta.error}</p>}
   </FormGroup>
 )
-
 
 export default EntryForm
 

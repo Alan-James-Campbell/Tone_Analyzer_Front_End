@@ -1,7 +1,7 @@
 import Home 								                         from './HomeComponent'
-import { connect }  					                       from 'react-redux'
-import { AppState }                                  from '../../reducers'
-import { getAllEntries }											       from '../../reducers/entry'
+import { connect }  					                       		 from 'react-redux'
+import { AppState }                                  				 from '../../reducers'
+import { getAllEntries }											 from '../../reducers/entry'
 
 const mapStateToProps = (state: AppState) => {
   const { sessionInfo } = state.auth || {}

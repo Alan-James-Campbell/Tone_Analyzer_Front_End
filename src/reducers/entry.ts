@@ -7,10 +7,11 @@ import axios               from 'axios'
 
 export interface EntryState {
   allEntries: ReadonlyArray<{ analysis: object, content: string, createdAt: number, entryId: string, title: string, userId: string }>,
-  lastAnalyzedEntryResults:    object,
-  lastAnalyzedTextSubmission:  string,
-  isLoading:                   boolean,
-  errorMessage:                string,
+  lastAnalyzedEntryResults:      object,
+  lastAnalyzedTextSubmission:    string,
+  isLoading:                     boolean,
+  errorMessage:                  string,
+  analysisResultsModalIsShowing: boolean
 }
 
 const initialState: EntryState = {
@@ -18,12 +19,15 @@ const initialState: EntryState = {
   lastAnalyzedEntryResults:       {},
   lastAnalyzedTextSubmission:     '',
   isLoading:                      false,
-  errorMessage:                   ''
+  errorMessage:                   '',
+  analysisResultsModalIsShowing:  false
+
 }
 
 //CONSTANTS//
 const UPDATE_LAST_ANALYZED_ENTRY               = 'UPDATE_LAST_ANALYZED_ENTRY'
 const UPDATE_LAST_ANALYZED_TEXT_SUBMISSION     = 'UPDATE_LAST_ANALYZED_TEXT_SUBMISSION'
+const UPDATE_SHOW_ANALYSIS_RESULTS_MODAL       = 'UPDATE_SHOW_ANALYSIS_RESULTS_MODAL'
 const LIST_ALL_ENTRIES                         = 'LIST_ALL_ENTRIES'
 // const CREATE_ENTRY                          = 'CREATE_ENTRY'
 
@@ -44,7 +48,15 @@ interface ListAllEntriesAction {
   payload: EntryState["allEntries"]
 }
 
-type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction
+interface showAnalysisResultsModalAction {
+  type: typeof UPDATE_SHOW_ANALYSIS_RESULTS_MODAL
+  payload: EntryState["analysisResultsModalIsShowing"]
+}
+
+
+
+type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction | showAnalysisResultsModalAction
+
 
 //ACTION CREATORS//
 export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["lastAnalyzedEntryResults"]): EntryTypes => 
@@ -65,6 +77,12 @@ export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["
     payload: allEntries 
   })
 
+  export const showAnalysisResultsModal = (show:EntryState["analysisResultsModalIsShowing"]): EntryTypes => 
+  ({
+    type: UPDATE_SHOW_ANALYSIS_RESULTS_MODAL, 
+    payload: show 
+  })
+
 // const postEntry = entry => dispatch => dispatch({type: CREATE_ENTRY, entry })
 
 
@@ -74,6 +92,7 @@ export const analyzeEntry = (text:string) => (dispatch:any) =>
     .then(response => {
       dispatch(update_Last_Analyzed_Text_Submission(text))
       dispatch(update_Last_Analyzed_Entry(response.data))
+      dispatch(showAnalysisResultsModal(true))
      })
     .catch(err => console.log(err))
 
@@ -120,6 +139,12 @@ const reducer = (state = initialState, action: EntryTypes ): EntryState => {
       return {
         ...state, 
         allEntries: action.payload
+      }    
+
+      case UPDATE_SHOW_ANALYSIS_RESULTS_MODAL:
+      return {
+        ...state, 
+        analysisResultsModalIsShowing: action.payload
       }
 
     default:

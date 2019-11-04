@@ -8,3 +8,11 @@
   height: 300px;
   margin-bottom: 20px;
 }
+
+#results-modal-title {
+  text-align: center;
+}
+
+.marginTop20 {
+  margin-top: 20px;
+}
