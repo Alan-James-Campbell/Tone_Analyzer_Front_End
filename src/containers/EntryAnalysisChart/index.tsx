@@ -1,11 +1,6 @@
 import React                                                          from 'react'
-import {ComposedChart, Cell, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
+import {ComposedChart, Cell, Bar, XAxis, YAxis, CartesianGrid }       from 'recharts'
 import                                                                './EntryAnalysisChart.css'
-
-interface EntryAnalysisChartProps { 
-  documentTones:  ReadonlyArray<{tone_name: string, tone_id: string, score: number }>,
-  documentLevel: Boolean
-}
 
 const EntryAnalysisChart = ({documentTones, documentLevel}: EntryAnalysisChartProps) => (
   <div id='EntryAnalysisChart'> 
@@ -41,6 +36,11 @@ const EntryAnalysisChart = ({documentTones, documentLevel}: EntryAnalysisChartPr
     )}
   </div>
 )
+
+interface EntryAnalysisChartProps { 
+  documentTones:  ReadonlyArray<{tone_name: string, tone_id: string, score: number }>,
+  documentLevel: Boolean
+}
 
 const toneColorDictionary: {[index: string]:any} = {
   Anger: 'red',

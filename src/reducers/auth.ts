@@ -91,7 +91,7 @@ export const checkUserAuthentication = () => (dispatch:any) =>
   Auth.currentSession()
   .then(sessionInfo => dispatch(updateSessionInfo(sessionInfo)))
   .catch(err => {
-   console.log('error: ' + err)
+   console.log(err)
    dispatch(updateSessionInfo({})) 
   })
 

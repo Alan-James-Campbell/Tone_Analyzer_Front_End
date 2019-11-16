@@ -1,26 +1,35 @@
-.Login {
-    padding: 60px 0;
-    margin: 0 auto;
-    text-align: center;
-  }
 
-@media all and (min-width: 480px) {
-  .Login form {
-    margin: 0 auto;
-    max-width: 320px;
+#Login-Form { 
+  background-color: #DFDFDF;
+  padding: 20px 10px;
+  text-align: center;
+  margin: 5%;
+  max-width: 500px;
+}
+
+.Login-Inputs, #Login-Submit-Button {
+  width: 70%;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+@media only screen and (min-width: 600px) {
+  #Login-Form {
+    margin: 8% 25%;
   }
 }
 
-.loginErrorAlert {
+.Login-Error-Alert {
   margin-top: 40px;
   width: 80%;
   margin: 40px auto;
+}
+
+.Login-Field-Top-Margin {
+  margin-top: 10px;
 }
 
 .alert {
   text-align: center;
 }
 
-.loginFieldTopMargin {
-  margin-top: 20px;
-}

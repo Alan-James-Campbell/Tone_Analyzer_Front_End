@@ -1,21 +1,21 @@
-import React, { useEffect }             from 'react'
+import React, { useEffect, useState }   from 'react'
 import { Link, useHistory }             from 'react-router-dom'
 import { LinkContainer }                from 'react-router-bootstrap'
 import { Navbar, Nav }                  from 'react-bootstrap'
-import                                   './App.css'
+import                                   './App.css' 
 
-type AppProps  = {
-  newUserAdded: Function;
-  isAuthenticated: Boolean;
-  checkUserAuthentication: Function;
-  updateSignupErrors: Function;
-  updateLoginErrors: Function;
-  logout: Function;
-}
+const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSignupErrors, updateLoginErrors, logout, getAllEntries }: AppProps) => {
 
-const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSignupErrors, updateLoginErrors, logout }: AppProps) => {
+  const [hasFetchedEntries, changeHasFetchedEntries] = useState(false)
 
   useEffect(() => {checkUserAuthentication()}, [checkUserAuthentication])
+
+  useEffect(() => {
+    if(isAuthenticated&&!hasFetchedEntries) {
+      getAllEntries()
+      changeHasFetchedEntries(true)
+    }
+  }, [isAuthenticated, getAllEntries, hasFetchedEntries])
 
   const onSignupClick = () => {
     newUserAdded('')
@@ -31,22 +31,25 @@ const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSign
   const history = useHistory()
 
   return (
-    <div className="App">
-      <Navbar bg="light" expand="lg">
+    <div className='App'>
+      <Navbar className='bg-dark justify-content-between' expand='lg'>
         <Navbar.Brand>
-          <Link to="/">Tone Analyzer</Link>
+          <Link className='App-title' to='/'>
+            <div id='App-title-1'>Tone</div>
+            <div id='App-title-2'>Analyzer</div>
+          </Link>
         </Navbar.Brand>
-        <Navbar.Toggle id='navFloatRight' aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-           <Nav className="ml-auto">
+        <Navbar.Toggle id='navFloatRight' aria-controls='basic-navbar-nav' />
+        <Navbar.Collapse id='basic-navbar-nav'>
+           <Nav className='ml-auto'>
               
               {!isAuthenticated&&(
                 <span>
-                  <LinkContainer to="/signup" onClick={e => onSignupClick() }>
-                     <Nav.Link>Signup</Nav.Link>
+                  <LinkContainer to='/signup' onClick={e => onSignupClick() }>
+                     <Nav.Link data-text='signup'>Signup</Nav.Link>
                   </LinkContainer>               
-                  <LinkContainer to="/login">
-                     <Nav.Link>Login</Nav.Link>
+                  <LinkContainer to='/login'>
+                     <Nav.Link data-text='login'>Login</Nav.Link>
                   </LinkContainer>
                 </span>
               )}
@@ -62,6 +65,16 @@ const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSign
       </Navbar>
     </div>
   )
+}
+
+type AppProps = {
+  newUserAdded: Function;
+  isAuthenticated: Boolean;
+  checkUserAuthentication: Function;
+  updateSignupErrors: Function;
+  updateLoginErrors: Function;
+  getAllEntries: Function,
+  logout: Function;
 }
 
 export default App

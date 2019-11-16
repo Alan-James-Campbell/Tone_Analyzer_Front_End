@@ -16,7 +16,8 @@ export interface SignupProps {
   signupErrorMessage: String;
   updateSignupErrors: Function;
   newUserSignedUp: String;
-  valid: Boolean
+  valid: Boolean; //redux-form prop
+  dirty: Boolean; //redux-form prop
 }
 
 const mapStateToProps = (state: AppState) => {

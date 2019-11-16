@@ -1,21 +1,29 @@
-.Signup {
-  padding: 30px 0;
-  margin: 0 auto;
+.Signup-And-Confirm-Forms {
+  background-color: #DFDFDF;
+  padding: 20px 10px;
   text-align: center;
+  margin: 5%;
+  max-width: 500px;
 }
 
-@media all and (min-width: 480px) {
-
-  .Signup form {
-    margin: 0 auto;
-    max-width: 320px;
+@media only screen and (min-width: 600px) {
+  .Signup-And-Confirm-Forms {
+    margin: 8% 25%;
   }
 }
 
-.signUpFieldTopMargin {
-  margin-top: 15px;
+.Signup-And-Confirm-Inputs, #Signup-Submit-Button {
+  max-width: 70%;
+  margin: 0 auto;
 }
 
-#signupConfirmButton {
-  margin-top: 20px;
+.Signup-And-Confirm-Error-Alert {
+  margin-top: 40px;
+  width: 80%;
+  margin: 40px auto;
+}
+
+
+.Signup-And-Confirm-Field-Top-Margin {
+  margin-top: 10px;
 }

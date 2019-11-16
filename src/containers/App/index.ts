@@ -1,12 +1,13 @@
 import App 								                           from './AppComponent'
 import { connect }  					                       from 'react-redux'
 import { AppState }                                  from '../../reducers'
+import { getAllEntries }                             from '../../reducers/entry'
 import { logout, 
          checkUserAuthentication, 
          newUserAdded, 
          updateLoginErrors, 
          updateSignupErrors
-       }                                             from '../../reducers/auth'
+       }                                             from '../../reducers/auth' 
 
 const mapStateToProps = (state: AppState) => {
   const sessionInfo  = state.auth.sessionInfo || {}
@@ -32,6 +33,9 @@ const mapDispatchToProps = (dispatch:any) => ({
   }, 
   updateLoginErrors(err:any){
     return dispatch(updateLoginErrors(err))
+  },
+  getAllEntries(){
+    return dispatch(getAllEntries())
   }
 })
 

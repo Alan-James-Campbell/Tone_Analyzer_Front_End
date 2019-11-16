@@ -1,17 +1,17 @@
 import { API }             from 'aws-amplify'
-// import { API, Storage } from 'aws-amplify'  <== ToDo: Add S3 storage capabilities
 import axios               from 'axios'
+// import { API, Storage } from 'aws-amplify'  <== ToDo: Add S3 storage capabilities
+
 
 //INITIAL STATE//
-
-
 export interface EntryState {
   allEntries: ReadonlyArray<{ analysis: object, content: string, createdAt: number, entryId: string, title: string, userId: string }>,
   lastAnalyzedEntryResults:      object,
   lastAnalyzedTextSubmission:    string,
   isLoading:                     boolean,
   errorMessage:                  string,
-  analysisResultsModalIsShowing: boolean
+  analysisResultsModalIsShowing: boolean,
+  lastSavedEntry:                {analysis: object, content: string, createdAt: number, entryId: string, title: string, userId: string}
 }
 
 const initialState: EntryState = {
@@ -20,8 +20,8 @@ const initialState: EntryState = {
   lastAnalyzedTextSubmission:     '',
   isLoading:                      false,
   errorMessage:                   '',
-  analysisResultsModalIsShowing:  false
-
+  analysisResultsModalIsShowing:  false,
+  lastSavedEntry:                 {analysis: {}, content: '', createdAt: 0, entryId: '', title: '', userId: ''}
 }
 
 //CONSTANTS//
@@ -29,8 +29,7 @@ const UPDATE_LAST_ANALYZED_ENTRY               = 'UPDATE_LAST_ANALYZED_ENTRY'
 const UPDATE_LAST_ANALYZED_TEXT_SUBMISSION     = 'UPDATE_LAST_ANALYZED_TEXT_SUBMISSION'
 const UPDATE_SHOW_ANALYSIS_RESULTS_MODAL       = 'UPDATE_SHOW_ANALYSIS_RESULTS_MODAL'
 const LIST_ALL_ENTRIES                         = 'LIST_ALL_ENTRIES'
-// const CREATE_ENTRY                          = 'CREATE_ENTRY'
-
+const APPEND_ALL_ENTRIES_STATE                 = 'APPEND_ALL_ENTRIES_STATE'
 
 //ACTION CREATOR TYPES//
 interface Update_Last_Analyzed_Entry_Action {
@@ -53,10 +52,12 @@ interface showAnalysisResultsModalAction {
   payload: EntryState["analysisResultsModalIsShowing"]
 }
 
+interface appendAllEntriesState {
+  type: typeof APPEND_ALL_ENTRIES_STATE
+  payload: EntryState["lastSavedEntry"]
+}
 
-
-type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction | showAnalysisResultsModalAction
-
+type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction | showAnalysisResultsModalAction | appendAllEntriesState
 
 //ACTION CREATORS//
 export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["lastAnalyzedEntryResults"]): EntryTypes => 
@@ -81,9 +82,13 @@ export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["
   ({
     type: UPDATE_SHOW_ANALYSIS_RESULTS_MODAL, 
     payload: show 
-  })
+  })  
 
-// const postEntry = entry => dispatch => dispatch({type: CREATE_ENTRY, entry })
+  export const appendAllEntriesState = (entry:EntryState["lastSavedEntry"]): EntryTypes => 
+  ({
+    type: APPEND_ALL_ENTRIES_STATE, 
+    payload: entry 
+  })
 
 
 //THUNKS//
@@ -98,26 +103,19 @@ export const analyzeEntry = (text:string) => (dispatch:any) =>
 
 export const getAllEntries = () => (dispatch:any) =>
   API.get("entries", "/entries", null)
-  .then(allEntries => dispatch(listAllEntries(allEntries)))
+  .then(allEntries => dispatch(listAllEntries(allEntries))) 
   .catch(err => console.log(err))
 
-// export const createEntry = (e, content, file, history) => dispatch => {
-//     alert(e, content, file, history)
-    // const filename = `${Date.now()}-${file.name}`
-    // Storage.vault.put(filename, file, {
-    //   contentType: file.type
-    // })
-    // .then(stored => {
-    //   return API.post('notes', '/notes', {
-    //     body: {content, attachment: stored.key}
-    //   })
-    // })
-    // .then(result =>  {
-    //   dispatch(postNote(result))
-    //   history.push('/')
-    // })
-    // .catch(err => console.log('err: ' + err))
-// }
+export const postEntry = (content:object, history:any) => (dispatch:any) => {
+  API.post('entries', '/entries', {
+    body: content
+  })
+  .then(result => {
+    dispatch(appendAllEntriesState(result))
+    history.push('/')
+  })
+  .catch(err => console.log(err))
+}
 
 //REDUCER//
 const reducer = (state = initialState, action: EntryTypes ): EntryState => {
@@ -129,7 +127,7 @@ const reducer = (state = initialState, action: EntryTypes ): EntryState => {
        lastAnalyzedEntryResults: action.payload
       }    
 
-      case UPDATE_LAST_ANALYZED_TEXT_SUBMISSION:
+    case UPDATE_LAST_ANALYZED_TEXT_SUBMISSION:
       return {
        ...state,
        lastAnalyzedTextSubmission: action.payload
@@ -139,9 +137,16 @@ const reducer = (state = initialState, action: EntryTypes ): EntryState => {
       return {
         ...state, 
         allEntries: action.payload
-      }    
+      }      
 
-      case UPDATE_SHOW_ANALYSIS_RESULTS_MODAL:
+    case APPEND_ALL_ENTRIES_STATE:
+      return {
+        ...state,
+        lastSavedEntry: action.payload,
+        allEntries: state.allEntries.concat(action.payload)
+      }
+
+    case UPDATE_SHOW_ANALYSIS_RESULTS_MODAL:
       return {
         ...state, 
         analysisResultsModalIsShowing: action.payload

@@ -1,21 +1,20 @@
 import Home 								                         from './HomeComponent'
-import { connect }  					                       		 from 'react-redux'
-import { AppState }                                  				 from '../../reducers'
-import { getAllEntries }											 from '../../reducers/entry'
+import { connect }  					                       from 'react-redux'
+import { AppState }                                  from '../../reducers'
 
 const mapStateToProps = (state: AppState) => {
   const { sessionInfo } = state.auth || {}
+  const { allEntries }  = state.entry
   const isAuthenticated = Object.keys(sessionInfo).length > 0
   
   return {
-  	isAuthenticated
+  	isAuthenticated,
+  	allEntries: JSON.stringify(allEntries)
   }
 }
 
 const mapDispatchToProps = (dispatch:any) => ({
-    getAllEntries(){
-  	  return dispatch(getAllEntries())
-    }
+
  })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Home) 

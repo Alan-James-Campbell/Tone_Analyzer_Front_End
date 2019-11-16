@@ -5,9 +5,11 @@ import { useHistory }                                       from 'react-router-d
 import { FormGroup, Input }                                 from 'reactstrap'
 import { SignupProps }                                       from './index'
 import { passwordValidation, emailValidation }              from '../../validations'
-import './Signup.css'
+import './Signup.css' 
 
-const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmit, isLoading, newUserSignedUp, password, passwordConfirmation, signupErrorMessage, updateSignupErrors, valid }: SignupProps) => {                                                      
+const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmit, isLoading, newUserSignedUp, password, passwordConfirmation, signupErrorMessage, updateSignupErrors, valid, dirty }: SignupProps) => {                                                      
+
+  const signUpEmoji = !dirty ? '😴' : !valid||password !== passwordConfirmation ? '🤔' : '😎'
 
   const history = useHistory()
 
@@ -15,22 +17,27 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
 
   const renderConfirmationForm =() => { 
     return (
-      <div className='Signup'>
-        <h2>Confirmation</h2><br/><br/>
-        <form onSubmit={(e:any) => handleConfirmationSubmit(e, newUserSignedUp, confirmCode, history)}>
-            <label>Confirmation Code</label>
-            <Field 
-              name='confirmCode'
-              type='tel'
-              label='Confirmation Code'
-              component={ReduxFormInput}
-              onFocus={() => signupErrorMessage ? updateSignupErrors('') : null }
-            />
-            <p>Please check your email for the code.</p>
+      <div>
+        <form
+           className='Signup-And-Confirm-Forms'
+           onSubmit={(e:any) => handleConfirmationSubmit(e, newUserSignedUp, confirmCode, history)}
+         >
+          <h2>Confirmation</h2><br/><br/>
+          <label>Confirmation Code</label>
+          <Field 
+            name='confirmCode'
+            type='tel'
+            label='Confirmation Code'
+            component={ReduxFormInput}
+            onFocus={() => signupErrorMessage ? updateSignupErrors('') : null }
+          />
+          <p>Please check your email for the code.</p>
           <Button
             block
             disabled={!validateConfirmationForm()}
             type='submit'
+            className='Signup-And-Confirm-Field-Top-Margin'
+            id='Signup-Submit-Button'
           >
             {isLoading ? (
               <div className='spinner-border' role='status'>
@@ -44,7 +51,7 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
           </Button>
         </form>
         {signupErrorMessage&&(
-          <div className='loginErrorAlert'>
+          <div className='Signup-Error-Alert'>
             <div className='alert alert-danger' role='alert'>
               {signupErrorMessage}
             </div>
@@ -57,10 +64,14 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
   const renderForm = () => {
 
     return (
-      <div className='Signup'>
-        <h2>Signup</h2><br/><br/>
-
-        <form onSubmit={(e:any) => handleSignupSubmit(e, email, password, history)}>
+      <div>
+        <form 
+          className='Signup-And-Confirm-Forms'
+          onSubmit={(e:any) => handleSignupSubmit(e, email, password, history)}
+         >
+          <h2>Signup
+            <div role='img' aria-label='signup-state'>{signUpEmoji}</div>
+          </h2><br/><br/>
           <label>Email</label>
           <Field 
             name='email' 
@@ -72,7 +83,7 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
 
           />
 
-          <label className='signUpFieldTopMargin'>Password</label>
+          <label className='Signup-And-Confirm-Field-Top-Margin'>Password</label>
           <Field 
             name='password' 
             type='password'
@@ -82,7 +93,7 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
             validate={ [passwordValidation] }
           />
 
-          <label className='signUpFieldTopMargin'>Confirm Password</label>
+          <label className='Signup-And-Confirm-Field-Top-Margin'>Confirm Password</label>
           <Field 
             name='confirmPassword' 
             type='password'
@@ -95,7 +106,8 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
             block
             disabled={!valid||(password !== passwordConfirmation)}
             type='submit'
-            id='signupConfirmButton'
+            className='Signup-And-Confirm-Field-Top-Margin'
+            id='Signup-Submit-Button'
           >
             {isLoading ? (
               <div className='spinner-border' role='status'>
@@ -103,7 +115,7 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
               </div>
             ) : (
               <div>
-                Confirm
+                Sign Up
               </div>
             )}
           </Button>
@@ -111,7 +123,7 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
         </form>
 
         {signupErrorMessage&&(
-          <div className='loginErrorAlert'>
+          <div className='Signup-And-Confirm-Alert'>
             <div className='alert alert-danger' role='alert'>
               {signupErrorMessage}
             </div>
@@ -123,7 +135,7 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
   }
 
   return (
-    <div className='Signup'>
+    <div>
       {newUserSignedUp
         ? renderConfirmationForm()
         : renderForm()
@@ -133,15 +145,19 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
 }
 
 const ReduxFormInput: React.FC = (field: any) => (
-  <FormGroup row={true}>
-    <Input
-      {...field.input}
-      type={field.type}
-      placeholder={field.label}
-      disabled={field.disabled}
-    />
-    {field.meta.touched && <p className='text-danger'>{field.meta.error}</p>}
-  </FormGroup>
+  <div>
+    <FormGroup row={true}>
+      <Input
+        {...field.input}
+        className='Signup-And-Confirm-Inputs'
+        type={field.type}
+        placeholder={field.label}
+        disabled={field.disabled}
+      />
+    </FormGroup>
+    {field.meta.dirty&&field.meta.touched && <p className='text-danger'>{field.meta.error}</p>}
+  </div>
+
 )
 
 export default Signup

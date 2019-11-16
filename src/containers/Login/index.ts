@@ -12,7 +12,8 @@ export interface LoginProps {
   isLoading: Boolean;
   password: String;
   updateLoginErrors: Function;
-  valid: Boolean;
+  valid: Boolean;  //redux-form prop
+  dirty: Boolean;  //redux-form prop
 }
 
 const mapStateToProps = (state: AppState) => {
