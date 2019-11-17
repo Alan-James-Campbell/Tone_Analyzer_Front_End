@@ -1,10 +1,13 @@
-import React                               from 'react'
-import { useHistory }                     from 'react-router-dom'
-import ReactTable                         from 'react-table'
-import Dashboard                          from '../Dashboard'
-import                                    'react-table/react-table.css' 
+import React                                from 'react'
+import { useHistory }                       from 'react-router-dom'
+import ReactTable                           from 'react-table'
+import Dashboard                            from '../Dashboard'
+import                                       './Home.css' 
+import                                      'react-table/react-table.css' 
+import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome'
+import { faTrash, faEdit }                  from '@fortawesome/free-solid-svg-icons' 
 
-const Home = ({ allEntries, isAuthenticated }: HomeProps) => {
+const Home = ({ allEntries, deleteEntry, isAuthenticated }: HomeProps) => {
 
   const data = JSON.parse(allEntries)  
   const history = useHistory()
@@ -25,6 +28,23 @@ const Home = ({ allEntries, isAuthenticated }: HomeProps) => {
                 columns={[
                   {
                     Header: 'Entry Title',
+                    Cell: row => {
+                     const {value} = row
+                     const {entryId} = row.original
+                      return (
+                        <h5>
+                          {value.slice(0,17) + (value.length > 17 ? '...' : '')}
+                          <span className='Home-entry-list-icons'>
+                            <span id='Home-edit-icon'><FontAwesomeIcon icon={faEdit}/></span>
+                            <span 
+                              id='Home-trash-icon'
+                              onClick={(e:any) => deleteEntry(entryId)}
+                             >
+                            <FontAwesomeIcon icon={faTrash}/></span>
+                          </span>
+                        </h5>
+                      )
+                    },
                     accessor: 'title',
                     filterMethod: (filter:any, row:any) => row.title.toLowerCase().includes(filter.value.toLowerCase())
                   }
@@ -55,6 +75,7 @@ const Home = ({ allEntries, isAuthenticated }: HomeProps) => {
 interface HomeProps {
   isAuthenticated: Boolean,
   allEntries: string,
+  deleteEntry: Function
 };
 
 export default Home

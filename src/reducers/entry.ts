@@ -1,5 +1,6 @@
 import { API }             from 'aws-amplify'
 import axios               from 'axios'
+import _                   from 'lodash'
 // import { API, Storage } from 'aws-amplify'  <== ToDo: Add S3 storage capabilities
 
 
@@ -30,6 +31,7 @@ const UPDATE_LAST_ANALYZED_TEXT_SUBMISSION     = 'UPDATE_LAST_ANALYZED_TEXT_SUBM
 const UPDATE_SHOW_ANALYSIS_RESULTS_MODAL       = 'UPDATE_SHOW_ANALYSIS_RESULTS_MODAL'
 const LIST_ALL_ENTRIES                         = 'LIST_ALL_ENTRIES'
 const APPEND_ALL_ENTRIES_STATE                 = 'APPEND_ALL_ENTRIES_STATE'
+const REMOVE_FROM_ALL_ENTRIES_STATE            = 'REMOVE_FROM_ALL_ENTRIES_STATE'
 
 //ACTION CREATOR TYPES//
 interface Update_Last_Analyzed_Entry_Action {
@@ -57,7 +59,12 @@ interface appendAllEntriesState {
   payload: EntryState["lastSavedEntry"]
 }
 
-type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction | showAnalysisResultsModalAction | appendAllEntriesState
+interface removeFromAllEntriesState {
+  type: typeof REMOVE_FROM_ALL_ENTRIES_STATE
+  payload: string
+}
+
+type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction | showAnalysisResultsModalAction | appendAllEntriesState | removeFromAllEntriesState
 
 //ACTION CREATORS//
 export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["lastAnalyzedEntryResults"]): EntryTypes => 
@@ -88,6 +95,12 @@ export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["
   ({
     type: APPEND_ALL_ENTRIES_STATE, 
     payload: entry 
+  })  
+
+  export const removeFromAllEntries = (entryId:string): EntryTypes => 
+  ({
+    type: REMOVE_FROM_ALL_ENTRIES_STATE, 
+    payload: entryId 
   })
 
 
@@ -114,6 +127,12 @@ export const postEntry = (content:object, history:any) => (dispatch:any) => {
     dispatch(appendAllEntriesState(result))
     history.push('/')
   })
+  .catch(err => console.log(err))
+}
+
+export const deleteEntry = (entryId:string) => (dispatch:any) => {
+  API.del('entries', ('/entries/' + entryId), null)
+  .then(result => dispatch(removeFromAllEntries(entryId))) 
   .catch(err => console.log(err))
 }
 
@@ -144,6 +163,13 @@ const reducer = (state = initialState, action: EntryTypes ): EntryState => {
         ...state,
         lastSavedEntry: action.payload,
         allEntries: state.allEntries.concat(action.payload)
+      }    
+
+    case REMOVE_FROM_ALL_ENTRIES_STATE:
+      const newAllEntries = _.remove(state.allEntries.concat(), (el:any) => el.entryId !== action.payload)
+      return {
+        ...state,
+        allEntries: newAllEntries
       }
 
     case UPDATE_SHOW_ANALYSIS_RESULTS_MODAL:

@@ -1,0 +1,17 @@
+.Home-entry-list-icons {
+  float: right;
+  font-size: 14px;
+}
+
+.Home-entry-list-icons:hover {
+  cursor: pointer;
+}
+
+#Home-trash-icon {
+  color: red;
+  margin-left: 10px;
+}
+
+#Home-edit-icon {
+  color: green;
+}
