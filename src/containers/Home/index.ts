@@ -1,7 +1,7 @@
-import Home 								                         from './HomeComponent'
-import { connect }  					                             from 'react-redux'
-import { AppState }                                                  from '../../reducers'
-import { deleteEntry }                                               from '../../reducers/entry' 
+import Home                                            from './HomeComponent'
+import { connect }                                     from 'react-redux'
+import { AppState }                                    from '../../reducers'
+import { deleteEntry, showAnalysisResultsModal }       from '../../reducers/entry' 
 
 
 const mapStateToProps = (state: AppState) => {
@@ -19,6 +19,16 @@ const mapDispatchToProps = (dispatch:any) => ({
   deleteEntry(entryId:string){
     return dispatch(deleteEntry(entryId))
   },
+  showAnalysisResultsModal(bool:boolean){
+    dispatch(showAnalysisResultsModal(bool))
+  }
 })
+
+export interface HomeProps {
+  isAuthenticated: Boolean,
+  allEntries: string,
+  deleteEntry: Function,
+  showAnalysisResultsModal: Function
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home) 

@@ -32,6 +32,7 @@ const UPDATE_SHOW_ANALYSIS_RESULTS_MODAL       = 'UPDATE_SHOW_ANALYSIS_RESULTS_M
 const LIST_ALL_ENTRIES                         = 'LIST_ALL_ENTRIES'
 const APPEND_ALL_ENTRIES_STATE                 = 'APPEND_ALL_ENTRIES_STATE'
 const REMOVE_FROM_ALL_ENTRIES_STATE            = 'REMOVE_FROM_ALL_ENTRIES_STATE'
+const EDIT_ALL_ENTRIES_STATE                  =  'EDIT_ALL_ENTRIES_STATE'
 
 //ACTION CREATOR TYPES//
 interface Update_Last_Analyzed_Entry_Action {
@@ -64,7 +65,12 @@ interface removeFromAllEntriesState {
   payload: string
 }
 
-type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction | showAnalysisResultsModalAction | appendAllEntriesState | removeFromAllEntriesState
+interface editAllEntriesState {
+  type: typeof EDIT_ALL_ENTRIES_STATE
+  payload: object
+}
+
+type EntryTypes = Update_Last_Analyzed_Entry_Action | Update_Last_Analyzed_Text_Submission_Action | ListAllEntriesAction | showAnalysisResultsModalAction | appendAllEntriesState | removeFromAllEntriesState | editAllEntriesState
 
 //ACTION CREATORS//
 export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["lastAnalyzedEntryResults"]): EntryTypes => 
@@ -101,6 +107,12 @@ export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["
   ({
     type: REMOVE_FROM_ALL_ENTRIES_STATE, 
     payload: entryId 
+  })  
+
+  export const editAllEntries = (entryId:string, content:any): EntryTypes => 
+  ({
+    type: EDIT_ALL_ENTRIES_STATE, 
+    payload: {entryId, content}
   })
 
 
@@ -133,6 +145,18 @@ export const postEntry = (content:object, history:any) => (dispatch:any) => {
 export const deleteEntry = (entryId:string) => (dispatch:any) => {
   API.del('entries', ('/entries/' + entryId), null)
   .then(result => dispatch(removeFromAllEntries(entryId))) 
+  .catch(err => console.log(err))
+}
+
+export const updateEntry = (content:object, entryId:string, history:any) => (dispatch:any) => {
+  API.put('entries', '/entries/' + entryId, {
+    body: content
+  })
+  .then(result => {
+    console.log('result', result)
+    dispatch(editAllEntries(entryId, content))
+    history.push('/')
+  })
   .catch(err => console.log(err))
 }
 
@@ -170,6 +194,19 @@ const reducer = (state = initialState, action: EntryTypes ): EntryState => {
       return {
         ...state,
         allEntries: newAllEntries
+      }    
+
+    case EDIT_ALL_ENTRIES_STATE:
+      const allEntriesCopy = state.allEntries.concat()
+      const entryId = _.get(action, 'payload.entryId', '')
+      const content = _.get(action, 'payload.content', {})
+      const index = _.findIndex(allEntriesCopy, obj => obj.entryId === entryId)
+      const originalEntry = allEntriesCopy[index]
+      const newEntry = Object.assign({}, originalEntry, content)
+      allEntriesCopy[index] = newEntry
+      return {
+        ...state,
+        allEntries: allEntriesCopy
       }
 
     case UPDATE_SHOW_ANALYSIS_RESULTS_MODAL:

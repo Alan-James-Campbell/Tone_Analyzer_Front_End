@@ -1,18 +1,20 @@
-.EntryForm {
-  padding: 60px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-#entryTextArea {
-  height: 300px;
-  margin-bottom: 20px;
-}
-
-#results-modal-title {
-  text-align: center;
-}
-
-.marginTop20 {
+.Entry-Form {
   margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+}
+
+.Entry-Form-Input {
+  width: 90%;
+  margin: 0 auto;
+}
+
+#Entry-Form-Show-Analysis-Button {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.Entry-Form-Field-Errors {
+	text-align: center;
+	margin-bottom: 10px;
 }

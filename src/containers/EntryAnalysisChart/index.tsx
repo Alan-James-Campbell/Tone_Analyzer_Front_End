@@ -32,7 +32,7 @@ const EntryAnalysisChart = ({documentTones, documentLevel}: EntryAnalysisChartPr
     )}
       
     {!(documentTones.length > 0)&&(
-      <h6 className='center'>{documentLevel ? 'No Overall Document Tone Detected' : 'No Sentence Tone Detected' }</h6>
+      <span className=''>{documentLevel ? 'No Overall Document Tone Detected' : 'No Sentence Tone Detected' }</span>
     )}
   </div>
 )

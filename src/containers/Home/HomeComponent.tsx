@@ -2,12 +2,13 @@ import React                                from 'react'
 import { useHistory }                       from 'react-router-dom'
 import ReactTable                           from 'react-table'
 import Dashboard                            from '../Dashboard'
-import                                       './Home.css' 
+import { HomeProps }                        from './index'  
+import                                      './Home.css' 
 import                                      'react-table/react-table.css' 
 import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit }                  from '@fortawesome/free-solid-svg-icons' 
 
-const Home = ({ allEntries, deleteEntry, isAuthenticated }: HomeProps) => {
+const Home = ({ allEntries, deleteEntry, isAuthenticated, showAnalysisResultsModal }: HomeProps) => {
 
   const data = JSON.parse(allEntries)  
   const history = useHistory()
@@ -17,7 +18,14 @@ const Home = ({ allEntries, deleteEntry, isAuthenticated }: HomeProps) => {
       
       {isAuthenticated&&(
         <div className='container'>
-          <button onClick={e => history.push('/entries/new')}>Create a New Entry</button>
+          <button 
+            onClick={e => {
+              showAnalysisResultsModal(false)
+              history.push('/entries/new')
+            }}
+            >
+              Create a New Entry
+          </button>
           
           <div className='row'>
             <div className='col-xs-3'>
@@ -30,12 +38,30 @@ const Home = ({ allEntries, deleteEntry, isAuthenticated }: HomeProps) => {
                     Header: 'Entry Title',
                     Cell: row => {
                      const {value} = row
-                     const {entryId} = row.original
+                     const {entryId, content, title} = row.original
                       return (
                         <h5>
-                          {value.slice(0,17) + (value.length > 17 ? '...' : '')}
+                          <span 
+                            onClick={(e:any) => {
+                              e.preventDefault();
+                              history.push('/entries/' + entryId)
+                            }}
+                          >
+                            {value.slice(0,30) + (value.length > 30 ? '...' : '')}
+                          </span>
                           <span className='Home-entry-list-icons'>
-                            <span id='Home-edit-icon'><FontAwesomeIcon icon={faEdit}/></span>
+                            <span
+                              id='Home-edit-icon'
+                              onClick={(e:any) => {
+                                 e.preventDefault();
+                                 history.push({
+                                  pathname: '/entries/edit/' + entryId,
+                                  state: { currentFormContent: content, currentTitle: title, entryId }
+                                })
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faEdit}/>
+                            </span>
                             <span 
                               id='Home-trash-icon'
                               onClick={(e:any) => deleteEntry(entryId)}
@@ -71,11 +97,5 @@ const Home = ({ allEntries, deleteEntry, isAuthenticated }: HomeProps) => {
     </div>
   )  
 }
-
-interface HomeProps {
-  isAuthenticated: Boolean,
-  allEntries: string,
-  deleteEntry: Function
-};
 
 export default Home

@@ -1,25 +1,44 @@
-.entryAnalysisResult {
-  margin-top: 270px;
-  padding-bottom: 100px;
+.Entry-Analysis {
+  padding: 20px;
   text-align: center;
-  background-color: #F0F0F0;
-  width: 100%;
-  height: 400px;
-  overflow: scroll;
+
 }
 
-#resultsChart {
-  position: fixed;
-  width: 500px;
-  height: 180px;
-  top: 95px;
-  left: 50%;
-  margin-left: -250px;
+.Entry-Analysis-Text-Interaction {
+  margin: 20px 0;
+  text-align: center;
+  padding: 20px;
+  background-color: #F6F6F6;  
+  min-height: 400px;
+  max-height: 600px;
+  overflow-y: scroll;
 }
 
-.glassHover:hover {
-  cursor: help;
+.Entry-Analysis-Active-Text {
+  color: #0055B2;
+  text-decoration: underline;
 }
+
+#Entry-Analysis-Text-Interaction-Title:hover, .Entry-Analysis-Text:hover {
+  cursor: pointer;
+}
+
+.Entry-Analysis-Buttons {
+  text-align: center;
+
+}
+
+.Entry-Analysis-Buttons-1 {
+  margin: 0 -0 0 -10px;
+}
+
+.Entry-Analysis-Buttons-2 {
+  margin: 0 0 0 10px; 
+}
+
+
+
+
 
 
 
