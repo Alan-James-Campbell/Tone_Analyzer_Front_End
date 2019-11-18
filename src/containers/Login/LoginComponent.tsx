@@ -22,7 +22,7 @@ const Login = ({email, errorMessage, handleLoginSubmit, isLoading, password, upd
         <h2>
           Login
           <div role='img' aria-label='login-state'>{loginEmoji}</div>
-        </h2><br/><br/>
+        </h2><br/>
         <label>Email</label>
         <Field 
           name='email' 
@@ -83,7 +83,6 @@ const ReduxFormInput: React.FC = (field: any) => (
         {...field.input}
         className='Login-Inputs'
         type={field.type}
-        placeholder={field.label}
         disabled={field.disabled}
       />
     </FormGroup>

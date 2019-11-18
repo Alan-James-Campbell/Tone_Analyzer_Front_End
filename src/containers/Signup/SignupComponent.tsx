@@ -71,7 +71,7 @@ const Signup = ({confirmCode, email, handleSignupSubmit, handleConfirmationSubmi
          >
           <h2>Signup
             <div role='img' aria-label='signup-state'>{signUpEmoji}</div>
-          </h2><br/><br/>
+          </h2><br/>
           <label>Email</label>
           <Field 
             name='email' 
@@ -151,7 +151,6 @@ const ReduxFormInput: React.FC = (field: any) => (
         {...field.input}
         className='Signup-And-Confirm-Inputs'
         type={field.type}
-        placeholder={field.label}
         disabled={field.disabled}
       />
     </FormGroup>

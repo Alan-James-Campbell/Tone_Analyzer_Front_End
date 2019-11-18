@@ -1,22 +1,21 @@
 
-#Login-Form { 
+#Login-Form {
   background-color: #DFDFDF;
-  padding: 20px 10px;
+  margin: 6% 10%;
   text-align: center;
-  margin: 5%;
-  max-width: 500px;
+  padding: 40px 0;
+}
+
+@media only screen and (min-width: 800px) {
+  #Login-Form {
+    margin: 6% 25%;
+  }
 }
 
 .Login-Inputs, #Login-Submit-Button {
   width: 70%;
   max-width: 300px;
   margin: 0 auto;
-}
-
-@media only screen and (min-width: 600px) {
-  #Login-Form {
-    margin: 8% 25%;
-  }
 }
 
 .Login-Error-Alert {
@@ -31,5 +30,9 @@
 
 .alert {
   text-align: center;
+}
+
+#Login-Submit-Button {
+  margin: 40px auto;
 }
 

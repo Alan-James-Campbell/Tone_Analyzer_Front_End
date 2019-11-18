@@ -1,14 +1,13 @@
 .Signup-And-Confirm-Forms {
   background-color: #DFDFDF;
-  padding: 20px 10px;
+  margin: 6% 10%;
   text-align: center;
-  margin: 5%;
-  max-width: 500px;
+  padding: 40px 0;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 800px) {
   .Signup-And-Confirm-Forms {
-    margin: 8% 25%;
+    margin: 6% 25%;
   }
 }
 
@@ -28,3 +27,8 @@
 .Signup-And-Confirm-Field-Top-Margin {
   margin-top: 10px;
 }
+
+#Signup-Submit-Button {
+  margin: 40px auto;
+}
+
