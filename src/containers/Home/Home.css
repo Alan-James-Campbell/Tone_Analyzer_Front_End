@@ -42,12 +42,13 @@
   color: purple;
 }
 
-.Home-Login-Text-Link:hover {
+.Home-Login-Text-Link:hover, #Home-Table-Entry-Link:hover, #Home-Table-Entry-Link:hover {
   cursor: pointer;
 }
 
-#Home-Table-Entry-Link:hover {
-  cursor: pointer;
+#Home-HighStock-Chart {
+  margin-top: 40px;
 }
+
 
 

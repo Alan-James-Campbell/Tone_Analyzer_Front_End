@@ -1,13 +1,13 @@
-import React                                from 'react'
-import { useHistory }                       from 'react-router-dom'
-import ReactTable                           from 'react-table'
-import Dashboard                            from '../Dashboard'
-import { HomeProps }                        from './index'
-import moment                               from 'moment'
-import                                      './Home.css' 
-import                                      'react-table/react-table.css' 
-import { FontAwesomeIcon }                  from '@fortawesome/react-fontawesome'
-import { faTrash, faEdit, faPlus, faHandPaper }                  from '@fortawesome/free-solid-svg-icons' 
+import React                                              from 'react'
+import { useHistory }                                     from 'react-router-dom'
+import ReactTable                                         from 'react-table'
+import { HomeProps }                                      from './index'
+import moment                                             from 'moment'
+import { FontAwesomeIcon }                                from '@fortawesome/react-fontawesome'
+import { faTrash, faEdit, faPlus, faHandPaper }           from '@fortawesome/free-solid-svg-icons' 
+import                                                    './Home.css' 
+import                                                    'react-table/react-table.css' 
+import Chart from                                         './HomeEntriesHistoryChart'
 
 const Home = ({ allEntries, deleteEntry, isAuthenticated, showAnalysisResultsModal }: HomeProps) => {
 
@@ -21,11 +21,10 @@ const Home = ({ allEntries, deleteEntry, isAuthenticated, showAnalysisResultsMod
         <div className='container'>
           
           <div className='row'>
-            <div id='Home-Table-Container'>
+            <div className='col-md-6' id='Home-Table-Container'>
               <ReactTable
                 data={data}
                 filterable
-                //defaultFilterMethod={(filter, row) => row.title.toLowerCase().includes(filter.value.toLowerCase())} 
                 columns={[
                   {
                     Header: 'Entry Title',
@@ -71,7 +70,7 @@ const Home = ({ allEntries, deleteEntry, isAuthenticated, showAnalysisResultsMod
                   {
                     Header: 'Creation Date',
                     Cell: row => {
-                     const dateString = moment.unix(row.original.createdAt/1000).format('MM/DD/YYYY')
+                     const dateString = moment.unix(row.original.createdAt/1000).format('MM/DD/YYYY LT')
                       return (
                         <small>
                           {dateString}
@@ -79,13 +78,20 @@ const Home = ({ allEntries, deleteEntry, isAuthenticated, showAnalysisResultsMod
                       )
                     },
                     accessor: 'createdAt',
-                    filterMethod: (filter:any, row:any) => moment.unix(row.createdAt/1000).format('MM/DD/YYYY').includes(filter.value)
+                    filterMethod: (filter:any, row:any) => moment.unix(row.createdAt/1000).format('MM/DD/YYYY LT').includes(filter.value)
                   }
                 ]}
-                  
+                defaultSorted={[
+                  {
+                    id: 'createdAt',
+                    desc: false
+                  }
+                 ]} 
                 defaultPageSize={7}
-                //className='-striped -highlight'
               />
+               <p><small><em>
+                 Click on the column titles to sort and toggle sort. Enter text below to filter.
+              </em></small></p>
               <button
                 className='btn btn-lg btn-success' 
                 id= 'Home-New-Entry-Button'
@@ -97,6 +103,9 @@ const Home = ({ allEntries, deleteEntry, isAuthenticated, showAnalysisResultsMod
              <FontAwesomeIcon icon={faPlus}/>
              {` Create a New Entry `}
           </button>
+            </div>
+            <div className='col-md-6'>
+              <Chart allEntries={allEntries}/>
             </div>  
           </div>  
         </div>

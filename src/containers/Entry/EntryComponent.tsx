@@ -1,10 +1,8 @@
-import React, { useState}      							from 'react'
-import { useParams }                     				from 'react-router-dom'
-import { Button }              							from 'react-bootstrap'
-import EntryAnalysisResult                              from '../EntryAnalysisResult'
-import { EntryProps }									from './index'
-import _											    from 'lodash'
-// import 												'./Entry.css'
+import React                            from 'react'
+import { useParams }                    from 'react-router-dom'
+import EntryAnalysisResult              from '../EntryAnalysisResult'
+import { EntryProps }                   from './index'
+import _                                from 'lodash'
 
 const Entry = ({ allEntries }: EntryProps) => {
   const { id } = useParams()
@@ -20,16 +18,13 @@ const Entry = ({ allEntries }: EntryProps) => {
 
   return (
   	<div className='row'>
-	  
 	  	{data.length > 0&&(
 	     <EntryAnalysisResult formType='' currentFormContent={currentFormContent} currentTitle={currentTitle} documentTones={documentTones} sentencesToneObjectArray={sentencesToneObjectArray}/>
 	  	)}
-
 	</div>
 
   )
 }
-
 
 export default Entry
 
