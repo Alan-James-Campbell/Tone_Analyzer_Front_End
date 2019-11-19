@@ -10,6 +10,7 @@
     "@reach/router": "^1.2.1",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.144",
+    "@types/moment": "^2.13.0",
     "@types/node": "^12.7.8",
     "@types/reach__router": "^1.2.6",
     "@types/react": "^16.9.3",
@@ -22,8 +23,11 @@
     "@types/recharts": "^1.8.3",
     "@types/redux-form": "^8.1.9",
     "aws-amplify": "^1.1.26",
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
     "connected-react-router": "^6.4.0",
+    "express": "^4.17.1",
     "highcharts": "^7.2.1",
     "highcharts-react-official": "^2.2.2",
     "ibm-watson": "^5.1.0",
@@ -47,12 +51,13 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-form": "^8.2.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "webpack-livereload-plugin": "^2.2.0"
   },
   "proxy": "http://localhost:5000",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "node index.js",
+    "build": "webpack",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
