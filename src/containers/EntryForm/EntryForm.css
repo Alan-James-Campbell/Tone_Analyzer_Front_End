@@ -1,0 +1,20 @@
+.Entry-Form {
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+}
+
+.Entry-Form-Input {
+  width: 90%;
+  margin: 0 auto;
+}
+
+#Entry-Form-Show-Analysis-Button {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.Entry-Form-Field-Errors {
+	text-align: center;
+	margin-bottom: 10px;
+}
