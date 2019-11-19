@@ -77,4 +77,4 @@ type AppProps = {
   logout: Function;
 }
 
-export default App
+export default App;
