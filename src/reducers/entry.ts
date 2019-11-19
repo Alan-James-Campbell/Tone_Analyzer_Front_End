@@ -1,6 +1,14 @@
 import { API }             from 'aws-amplify'
 import axios               from 'axios'
-import _                   from 'lodash'
+import _                   from 'lodash' 
+const ToneAnalyzerV3       = require('ibm-watson/tone-analyzer/v3')
+const { IamAuthenticator } = require('ibm-watson/auth')
+
+const toneAnalyzer = new ToneAnalyzerV3({
+  version: '2017-09-21',
+  authenticator: new IamAuthenticator({apikey:'s8NneGprypcjshsq9xFNEECgB-NT_0F_4l-R34bN1qHR'}), 
+  url: 'https://gateway.watsonplatform.net/tone-analyzer/api'
+})
 // import { API, Storage } from 'aws-amplify'  <== ToDo: Add S3 storage capabilities
 
 
@@ -117,14 +125,16 @@ export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["
 
 
 //THUNKS//
-export const analyzeEntry = (text:string) => (dispatch:any) => 
-  axios.post(`/api/entries/analyzeEntry`, {text})
-    .then(response => {
-      dispatch(update_Last_Analyzed_Text_Submission(text))
-      dispatch(update_Last_Analyzed_Entry(response.data))
-      dispatch(showAnalysisResultsModal(true))
-     })
-    .catch(err => console.log(err))
+export const analyzeEntry = (text:string) => (dispatch:any) => {
+  const toneParams = {toneInput: { text }, contentType: 'application/json'}
+  toneAnalyzer.tone(toneParams)
+  .then((toneAnalysis:any) => {
+    dispatch(update_Last_Analyzed_Text_Submission(text))
+    dispatch(update_Last_Analyzed_Entry(toneAnalysis))
+    dispatch(showAnalysisResultsModal(true))
+   })
+  .catch((err:any) => console.log(err))
+ }
 
 export const getAllEntries = () => (dispatch:any) =>
   API.get("entries", "/entries", null)
