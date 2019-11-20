@@ -31,6 +31,14 @@ const config = {
     align: 'center',
     verticalAlign: 'bottom',
   },
+  plotOptions: {
+   series: {
+    allowPointSelect: true,
+      marker: {
+        enabled: true
+      }
+    }
+  }
 }
 
 const makeData = entries => {
