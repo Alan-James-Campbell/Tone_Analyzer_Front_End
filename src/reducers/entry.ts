@@ -117,14 +117,14 @@ export const update_Last_Analyzed_Entry = (lastAnalyzedEntryResults:EntryState["
 
 
 //THUNKS//
-export const analyzeEntry = (text:string) => (dispatch:any) => 
-  axios.post(`/api/entries/analyzeEntry`, {text})
-    .then(response => {
-      dispatch(update_Last_Analyzed_Text_Submission(text))
-      dispatch(update_Last_Analyzed_Entry(response.data))
-      dispatch(showAnalysisResultsModal(true))
-     })
-    .catch(err => console.log(err))
+export const analyzeEntry = (text:string) => (dispatch:any) => {
+  API.post('entries', '/entries/analyzeEntry', {body: text})
+  .then(response => {
+    dispatch(update_Last_Analyzed_Text_Submission(text))
+    dispatch(update_Last_Analyzed_Entry(response.result))
+    dispatch(showAnalysisResultsModal(true))
+   })
+  .catch(err => console.log(err))}
 
 export const getAllEntries = () => (dispatch:any) =>
   API.get("entries", "/entries", null)
