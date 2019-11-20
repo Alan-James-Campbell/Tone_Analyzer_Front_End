@@ -1,14 +1,6 @@
 import { API }             from 'aws-amplify'
 import axios               from 'axios'
 import _                   from 'lodash' 
-const ToneAnalyzerV3       = require('ibm-watson/tone-analyzer/v3')
-const { IamAuthenticator } = require('ibm-watson/auth')
-
-const toneAnalyzer = new ToneAnalyzerV3({
-  version: '2017-09-21',
-  authenticator: new IamAuthenticator({apikey:'s8NneGprypcjshsq9xFNEECgB-NT_0F_4l-R34bN1qHR'}), 
-  url: 'https://cors-anywhere.herokuapp.com/https://gateway.watsonplatform.net/tone-analyzer/api'
-})
 // import { API, Storage } from 'aws-amplify'  <== ToDo: Add S3 storage capabilities
 
 
