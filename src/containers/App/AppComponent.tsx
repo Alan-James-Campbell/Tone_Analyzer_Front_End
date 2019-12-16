@@ -1,21 +1,19 @@
-import React, { useEffect, useState }   from 'react'
+import React, { useEffect }             from 'react'
 import { Link, useHistory }             from 'react-router-dom'
 import { LinkContainer }                from 'react-router-bootstrap'
 import { Navbar, Nav }                  from 'react-bootstrap'
+import { AppProps }                     from './index'
 import                                   './App.css' 
 
-const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSignupErrors, updateLoginErrors, logout, getAllEntries }: AppProps) => {
-
-  const [hasFetchedEntries, changeHasFetchedEntries] = useState(false)
+const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, hasFetchedUserEntries, updateSignupErrors, updateLoginErrors, logout, getAllUserEntries, userId }: AppProps) => {
 
   useEffect(() => {checkUserAuthentication()}, [checkUserAuthentication])
 
   useEffect(() => {
-    if(isAuthenticated&&!hasFetchedEntries) {
-      getAllEntries()
-      changeHasFetchedEntries(true)
+    if(isAuthenticated&&!hasFetchedUserEntries) {
+      getAllUserEntries()
     }
-  }, [isAuthenticated, getAllEntries, hasFetchedEntries])
+  }, [isAuthenticated, getAllUserEntries, hasFetchedUserEntries])
 
   const onSignupClick = () => {
     newUserAdded('')
@@ -65,16 +63,6 @@ const App = ({newUserAdded, isAuthenticated, checkUserAuthentication, updateSign
       </Navbar>
     </div>
   )
-}
-
-type AppProps = {
-  newUserAdded: Function;
-  isAuthenticated: Boolean;
-  checkUserAuthentication: Function;
-  updateSignupErrors: Function;
-  updateLoginErrors: Function;
-  getAllEntries: Function,
-  logout: Function;
 }
 
 export default App

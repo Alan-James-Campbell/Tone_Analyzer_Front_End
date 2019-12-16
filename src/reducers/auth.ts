@@ -23,6 +23,7 @@ const NEW_USER_SIGNED_UP   = 'NEW_USER_SIGNED_UP'
 const UPDATE_IS_LOADING    = 'UPDATE_IS_LOADING'
 const UPDATE_LOGIN_ERRORS  = 'UPDATE_LOGIN_ERRORS'
 const UPDATE_SIGNUP_ERRORS = 'UPDATE_SIGNUP_ERRORS'
+const AUTH_LOGOUT          = 'AUTH_LOGOUT'
 
 //ACTION CREATOR TYPES//
 interface UpdateSessionInfoAction {
@@ -83,6 +84,11 @@ export const updateSignupErrors = (errorMessage: AuthState["signupErrorMessage"]
   ({
     type: UPDATE_SIGNUP_ERRORS,
     payload: errorMessage
+  })
+
+  export const performLogout = () =>
+  ({
+    type: AUTH_LOGOUT
   })
 
 
@@ -152,6 +158,7 @@ export const confirm = (newUser:string, confirmCode:any, history:any) => (dispat
 export const logout = (routerHistory:any) => (dispatch:any) => 
   Auth.signOut()
   .then(() => dispatch(updateSessionInfo({})))
+  .then(() => dispatch(performLogout()))
   .then(() => routerHistory.push('/'))
 
 

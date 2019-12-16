@@ -1,19 +1,33 @@
 import App 								                           from './AppComponent'
 import { connect }  					                       from 'react-redux'
 import { AppState }                                  from '../../reducers'
-import { getAllEntries }                             from '../../reducers/entry'
+import { getAllUserEntries }                         from '../../reducers/entry'
 import { logout, 
          checkUserAuthentication, 
          newUserAdded, 
          updateLoginErrors, 
          updateSignupErrors
-       }                                             from '../../reducers/auth' 
+       }                                             from '../../reducers/auth'
+
+export type AppProps = {
+  newUserAdded: Function;
+  hasFetchedUserEntries: Boolean;
+  isAuthenticated: Boolean;
+  checkUserAuthentication: Function;
+  updateSignupErrors: Function;
+  updateLoginErrors: Function;
+  getAllUserEntries: Function,
+  logout: Function;
+  userId: Number;
+}
 
 const mapStateToProps = (state: AppState) => {
   const sessionInfo  = state.auth.sessionInfo || {}
   const isAuthenticated = Object.keys(sessionInfo).length > 0
+  const { hasFetchedUserEntries } = state.entry
   
   return {
+    hasFetchedUserEntries,
     isAuthenticated
   }
 }
@@ -34,8 +48,8 @@ const mapDispatchToProps = (dispatch:any) => ({
   updateLoginErrors(err:any){
     return dispatch(updateLoginErrors(err))
   },
-  getAllEntries(){
-    return dispatch(getAllEntries())
+  getAllUserEntries(){
+    return dispatch(getAllUserEntries())
   }
 })
 

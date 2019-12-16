@@ -1,5 +1,4 @@
 import { API }             from 'aws-amplify'
-import axios               from 'axios'
 import _                   from 'lodash' 
 // import { API, Storage } from 'aws-amplify'  <== ToDo: Add S3 storage capabilities
 
@@ -7,6 +6,7 @@ import _                   from 'lodash'
 //INITIAL STATE//
 export interface EntryState {
   allEntries: ReadonlyArray<{ analysis: object, content: string, createdAt: number, entryId: string, title: string, userId: string }>,
+  hasFetchedUserEntries:         boolean,
   lastAnalyzedEntryResults:      object,
   lastAnalyzedTextSubmission:    string,
   isLoading:                     boolean,
@@ -17,6 +17,7 @@ export interface EntryState {
 
 const initialState: EntryState = {
   allEntries:                     [],
+  hasFetchedUserEntries:          false,
   lastAnalyzedEntryResults:       {},
   lastAnalyzedTextSubmission:     '',
   isLoading:                      false,
@@ -126,7 +127,7 @@ export const analyzeEntry = (text:string) => (dispatch:any) => {
    })
   .catch(err => console.log(err))}
 
-export const getAllEntries = () => (dispatch:any) =>
+export const getAllUserEntries = () => (dispatch:any) =>
   API.get("entries", "/entries", null)
   .then(allEntries => dispatch(listAllEntries(allEntries))) 
   .catch(err => console.log(err))
@@ -178,7 +179,9 @@ const reducer = (state = initialState, action: EntryTypes ): EntryState => {
     case LIST_ALL_ENTRIES:
       return {
         ...state, 
-        allEntries: action.payload
+        allEntries: action.payload,
+        hasFetchedUserEntries: true
+
       }      
 
     case APPEND_ALL_ENTRIES_STATE:
